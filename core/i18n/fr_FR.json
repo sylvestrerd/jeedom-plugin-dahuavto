@@ -1,0 +1,52 @@
+{
+    "plugins\/dahuavto\/plugin_info\/configuration.php": {
+        "401 - Accès non autorisé": "401 - Accès non autorisé",
+        "Port socket interne (modification dangereuse)": "Port socket interne (modification dangereuse)"
+    },
+    "plugins\/dahuavto\/desktop\/php\/weather.php": {
+        "401 - Accès non autorisé": "401 - Accès non autorisé",
+        "Gestion": "Gestion",
+        "Ajouter": "Ajouter",
+        "Configuration": "Configuration",
+        "Mes équipements Dahua": "Mes équipements Dahua",
+        "Rechercher": "Rechercher",
+        "Configuration avancée": "Configuration avancée",
+        "Dupliquer": "Dupliquer",
+        "Sauvegarder": "Sauvegarder",
+        "Supprimer": "Supprimer",
+        "Equipement": "Equipement",
+        "Commandes": "Commandes",
+        "Général": "Général",
+        "Nom de l'équipement": "Nom de l'équipement",
+        "Objet parent": "Objet parent",
+        "Aucun": "Aucun",
+        "Catégorie": "Catégorie",
+        "Options": "Options",
+        "Activer": "Activer",
+        "Visible": "Visible",
+        "Paramètres": "Paramètres",
+        "Hote": "Hote",
+        "Nom d'utilisateur": "Nom d'utilisateur",
+        "Mot de passe": "Mot de passe",
+        "Informations": "Informations",
+        "Modèle": "Modèle",
+        "Référence": "Référence",
+        "N° de série": "N° de série"
+    },
+    "plugins\/dahuavto\/desktop\/js\/weather.js": {
+        "Nom": "Nom",
+        "Afficher": "Afficher",
+        "Historiser": "Historiser",
+        "Tester": "Tester"
+    },
+    "plugins\/dahuavto\/core\/ajax\/weather.ajax.php": {
+        "401 - Accès non autorisé": "401 - Accès non autorisé",
+        "Weather inconnu verifié l\\'id": "Weather inconnu verifié l\\'id",
+        "Aucune methode correspondante à : ": "Aucune methode correspondante à : "
+    },
+    "plugins\/dahuavto\/core\/class\/weather.class.php": {
+        "Appel": "Appel",
+        "Porte": "Porte",
+        "Déverouiller": "Déverouiller",
+    }
+}

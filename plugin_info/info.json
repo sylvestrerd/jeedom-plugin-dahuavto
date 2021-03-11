@@ -1,0 +1,22 @@
+{
+	"id" : "dahuavto",
+	"name" : "Dahua VTO",
+	"description" : {
+		"fr_FR": "Plugin permettant la communication avec un VTO de marque Dahua",
+		"en_US": "Plugin used to communicate with a Dahua VTO"
+	},
+	"licence" : "AGPL",
+	"author" : "Paul-DS",
+	"require" : "3.3.39",
+	"category" : "automation protocol",
+	"hasDependency" : false,
+	"hasOwnDeamon" : true,
+	"maxDependancyInstallTime" : 0,
+	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
+	"documentation" : "https://jeedom.github.io/plugin-template/#language#/",
+	"link" : {
+		"github":"https://github.com/Paul-DS/jeedom-plugin-dahuavto"
+	},
+	"language" : ["fr_FR","en_US"],
+	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile","v4"]
+}
