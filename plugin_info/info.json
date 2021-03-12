@@ -12,8 +12,8 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
-	"documentation" : "https://jeedom.github.io/plugin-template/#language#/",
+	"changelog" : "https://paul-ds.github.io/jeedom-plugin-dahuavto/#language#/changelog",
+	"documentation" : "https://paul-ds.github.io/jeedom-plugin-dahuavto/#language#/",
 	"link" : {
 		"github":"https://github.com/Paul-DS/jeedom-plugin-dahuavto"
 	},
