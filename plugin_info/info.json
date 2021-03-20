@@ -8,7 +8,7 @@
 	"licence" : "AGPL",
 	"author" : "Paul-DS",
 	"require" : "3.3.39",
-	"category" : "automation protocol",
+	"category" : "devicecommunication",
 	"hasDependency" : false,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 0,
