@@ -55,12 +55,12 @@ class DahuaVTOClient(asyncio.Protocol):
         except Exception as ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
 
-            logging.error(f"Failed to handle message, error: {ex}, Line: {exc_tb.tb_lineno}")
+            logging.error("Failed to handle message, error: {}, Line: {}".format(ex, exc_tb.tb_lineno))
 
     def data_received(self, data):
         try:
             message = self.parse_response(data)
-            logging.debug(f"Data received: {message}")
+            logging.debug("Data received: {}".format(message))
 
             message_id = message.get("id")
             params = message.get("params")
@@ -83,7 +83,7 @@ class DahuaVTOClient(asyncio.Protocol):
         except Exception as ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
 
-            logging.error(f"Failed to handle message, error: {ex}, Line: {exc_tb.tb_lineno}")
+            logging.error("Failed to handle message, error: {}, Line: {}".format(ex, exc_tb.tb_lineno))
 
     def handle_notify_event_stream(self, params):
         try:
@@ -101,7 +101,7 @@ class DahuaVTOClient(asyncio.Protocol):
         except Exception as ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
 
-            logging.error(f"Failed to handle event, error: {ex}, Line: {exc_tb.tb_lineno}")
+            logging.error("Failed to handle event, error: {}, Line: {}".format(ex, exc_tb.tb_lineno))
 
     def handle_login_error(self, error, message, params):
         error_message = error.get("message")
@@ -182,7 +182,7 @@ class DahuaVTOClient(asyncio.Protocol):
         try:
             logging.debug("Loading Dahua details")
 
-            url = f"http://{self.host}/cgi-bin/magicBox.cgi?action=getSystemInfo"
+            url = "http://{}/cgi-bin/magicBox.cgi?action=getSystemInfo".format(self.host)
 
             response = requests.get(url, auth=HTTPDigestAuth(self.username, self.password))
 
@@ -198,7 +198,7 @@ class DahuaVTOClient(asyncio.Protocol):
         except Exception as ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
 
-            logging.error(f"Failed to retrieve Dahua model, error: {ex}, Line: {exc_tb.tb_lineno}")
+            logging.error("Failed to retrieve Dahua model, error: {}, Line: {}".format(ex, exc_tb.tb_lineno))
 
     @staticmethod
     def parse_response(response):
@@ -216,17 +216,17 @@ class DahuaVTOClient(asyncio.Protocol):
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
 
-            logging.error(f"Failed to read data: {response}, error: {e}, Line: {exc_tb.tb_lineno}")
+            logging.error("Failed to read data: {}, error: {}, Line: {}".format(response, e, exc_tb.tb_lineno))
 
         return result
 
     @staticmethod
     def _get_hashed_password(random, realm, username, password):
-        password_str = f"{username}:{realm}:{password}"
+        password_str = "{}:{}:{}".format(username, realm, password)
         password_bytes = password_str.encode('utf-8')
         password_hash = hashlib.md5(password_bytes).hexdigest().upper()
 
-        random_str = f"{username}:{random}:{password_hash}"
+        random_str = "{}:{}:{}".format(username, random, password_hash)
         random_bytes = random_str.encode('utf-8')
         random_hash = hashlib.md5(random_bytes).hexdigest().upper()
 

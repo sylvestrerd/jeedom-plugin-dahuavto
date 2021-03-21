@@ -52,7 +52,7 @@ class DahuaVTOManager:
                 sleep(5)
 
             except Exception as e:
-                logging.error(f"Connection failed will try to connect in 30 seconds ({e}")
+                logging.error("Connection failed will try to connect in 30 seconds ({})".format(e))
                 logging.debug(traceback.format_exc())
 
                 sleep(30)
@@ -63,18 +63,21 @@ class DahuaVTOManager:
         logging.debug("-------------------")
 
         if message["Action"] == "Start" and message["Code"] == "CallNoAnswered":
-            JEEDOM_COM.add_changes(f"devices::{self._device['id']}", { 'calling': 1 })
+            self._send_change({ 'calling': 1 })
             Timer(
                 30,
-                lambda: JEEDOM_COM.add_changes(f"devices::{self._device['id']}", { 'calling': 0 }),
+                lambda: self._send_change({ 'calling': 0 }),
             ).start()
 
         if message["Action"] == "Pulse" and message["Code"] == "AccessControl":
-            JEEDOM_COM.add_changes(f"devices::{self._device['id']}", { 'unlocked': 1 })
+            self._send_change({ 'unlocked': 1 })
             Timer(
                 10,
-                lambda: JEEDOM_COM.add_changes(f"devices::{self._device['id']}", { 'unlocked': 0 }),
+                lambda: self._send_change({ 'unlocked': 0 }),
             ).start()
+
+    def _send_change(self, params):
+        JEEDOM_COM.add_changes("devices::{}".format(self._device['id']), params),
 
     def stop(self):
         self._running = False
@@ -92,13 +95,13 @@ def read_socket(name):
                 message = JEEDOM_SOCKET_MESSAGE.get().decode('utf-8')
                 message = json.loads(message)
                 if message['apikey'] != _apikey:
-                    logging.error("Invalid apikey from socket : " + str(message))
+                    logging.error("Invalid apikey from socket : {}".format(str(message)))
                     return
-                logging.debug('Received command from jeedom : '+str(message['cmd']))
+                logging.debug('Received command from jeedom : {}'.format(str(message['cmd'])))
 
                 if message['cmd'] == 'add':
                     if 'id' in message['device']:
-                        logging.debug('Add device : '+str(message['device']['id']))
+                        logging.debug('Add device : {}'.format(str(message['device']['id'])))
                         if message['device']['id'] in DEVICES:
                             DEVICES[message['device']['id']]['manager'].stop()
 
@@ -109,7 +112,7 @@ def read_socket(name):
                         threading.Thread(target=device['manager'].initialize).start()
                             
                 elif message['cmd'] == 'remove':
-                    logging.debug('Remove device : '+str(message['device']))
+                    logging.debug('Remove device : {}'.format(str(message['device'])))
                     if message['device']['id'] in DEVICES:
                         DEVICES[message['device']['id']]['manager'].stop()
                         del DEVICES[message['device']['id']]
@@ -122,7 +125,7 @@ def read_socket(name):
                             device['manager'].stop()
                     should_stop = True
         except Exception as e:
-            logging.error("Exception on socket : %s" % str(e))
+            logging.error("Exception on socket : {}".format(e))
             logging.debug(traceback.format_exc())
         time.sleep(0.3)
     
@@ -131,7 +134,7 @@ def read_socket(name):
 
 def shutdown():
 	logging.debug("Shutdown")
-	logging.debug("Removing PID file " + str(_pidfile))
+	logging.debug("Removing PID file {}".format(str(_pidfile)))
 	try:
 		os.remove(_pidfile)
 	except:
@@ -189,14 +192,14 @@ _cycle = float(_cycle)
 jeedom_utils.set_log_level(_log_level)
 logging.info('Starting Dahua VTO daemon...')
 
-logging.debug(f"log_level: {_log_level}")
-logging.debug(f"pidfile: {_pidfile}")
-logging.debug(f"callback: {_callback}")
-logging.debug(f"apikey: {_apikey}")
-logging.debug(f"cycle: {_cycle}")
-logging.debug(f"socket_port: {_socket_port}")
-logging.debug(f"socket_host: {_socket_host}")
-logging.debug(f"daemon_name: {_daemon_name}")
+logging.debug("log_level: {}".format(_log_level))
+logging.debug("pidfile: {}".format(_pidfile))
+logging.debug("callback: {}".format(_callback))
+logging.debug("apikey: {}".format(_apikey))
+logging.debug("cycle: {}".format(_cycle))
+logging.debug("socket_port: {}".format(_socket_port))
+logging.debug("socket_host: {}".format(_socket_host))
+logging.debug("daemon_name: {}".format(_daemon_name))
 
 try:
     jeedom_utils.write_pid(str(_pidfile))
@@ -210,6 +213,6 @@ try:
     jeedom_socket.open()
     threading.Thread(target=read_socket, args=('socket',)).start()
 except Exception as e:
-    logging.error('Fatal error : '+str(e))
+    logging.error('Fatal error : {}'.format(str(e)))
     logging.debug(traceback.format_exc())
     shutdown()

@@ -45,7 +45,7 @@ class MessageParams:
             self.authorityType = "Default"
 
     def __repr__(self):
-        return f"{self.__dict__}"
+        return str(self.__dict__)
 
 
 class MessageData:
@@ -97,4 +97,4 @@ class MessageData:
         return message
 
     def __repr__(self):
-        return f"{self.__dict__}"
+        return str(self.__dict__)
