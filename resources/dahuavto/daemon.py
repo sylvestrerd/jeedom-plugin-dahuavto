@@ -82,7 +82,7 @@ class DahuaVTOManager:
     def stop(self):
         self._running = False
         if self._loop and self._loop.is_running:
-            self._loop.close()
+            self._loop.stop()
 
 
 def read_socket(name):
