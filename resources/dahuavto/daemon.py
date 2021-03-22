@@ -7,7 +7,7 @@ import logging
 import os
 import sys
 import traceback
-from threading import Timer
+from threading import Timer, Thread
 from time import sleep
 
 from vto_client import DahuaVTOClient
@@ -211,7 +211,7 @@ try:
 
     jeedom_socket = jeedom_socket(port=_socket_port,address=_socket_host)
     jeedom_socket.open()
-    threading.Thread(target=read_socket, args=('socket',)).start()
+    Thread(target=read_socket, args=('socket',)).start()
 except Exception as e:
     logging.error('Fatal error : {}'.format(str(e)))
     logging.debug(traceback.format_exc())

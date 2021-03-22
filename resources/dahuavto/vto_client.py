@@ -26,7 +26,7 @@ class DahuaVTOClient(asyncio.Protocol):
         self.realm = None
         self.random = None
         self.request_id = 1
-        self.sessionId = 0
+        self.session_id = 0
         self.keep_alive_interval = 0
         self.transport = None
 
@@ -99,7 +99,7 @@ class DahuaVTOClient(asyncio.Protocol):
         if error_message == "Component error: login challenge!":
             self.random = params.get("random")
             self.realm = params.get("realm")
-            self.sessionId = message.get("session")
+            self.session_id = message.get("session")
 
             self.login()
 
@@ -134,7 +134,7 @@ class DahuaVTOClient(asyncio.Protocol):
     def pre_login(self):
         logging.debug("Prepare pre-login message")
 
-        message_data = MessageData(self.request_id, self.sessionId)
+        message_data = MessageData(self.request_id, self.session_id)
         message_data.login(self.username)
 
         if not self.transport.is_closing():
@@ -145,7 +145,7 @@ class DahuaVTOClient(asyncio.Protocol):
 
         password = self._get_hashed_password(self.random, self.realm, self.username, self.password)
 
-        message_data = MessageData(self.request_id, self.sessionId)
+        message_data = MessageData(self.request_id, self.session_id)
         message_data.login(self.username, password)
 
         self.send(message_data)
@@ -153,7 +153,7 @@ class DahuaVTOClient(asyncio.Protocol):
     def attach_event_manager(self):
         logging.info("Attach event manager")
 
-        message_data = MessageData(self.request_id, self.sessionId)
+        message_data = MessageData(self.request_id, self.session_id)
         message_data.attach()
 
         self.send(message_data)
@@ -161,7 +161,7 @@ class DahuaVTOClient(asyncio.Protocol):
     def keep_alive(self):
         logging.debug("Keep alive")
 
-        message_data = MessageData(self.request_id, self.sessionId)
+        message_data = MessageData(self.request_id, self.session_id)
         message_data.keep_alive(self.keep_alive_interval)
 
         self.send(message_data)
