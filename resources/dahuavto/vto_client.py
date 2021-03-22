@@ -16,16 +16,6 @@ from messages import MessageData
 DAHUA_ALLOWED_DETAILS = ["deviceType", "serialNumber"]
 
 class DahuaVTOClient(asyncio.Protocol):
-    requestId: int
-    sessionId: int
-    keep_alive_interval: int
-    username: str
-    password: str
-    realm: Optional[str]
-    random: Optional[str]
-    messages: []
-    dahua_details: {}
-
     def __init__(self, host, username, password, message_callback):
         self.dahua_details = {}
         self.host = host

@@ -17,15 +17,6 @@ def _to_json(obj):
 
 
 class MessageParams:
-    clientType: str
-    ipAddr: str
-    loginType: str
-    password: str
-    userName: str
-    authorityType: str
-    codes: []
-    timeout: int
-    action: bool
 
     def keep_alive(self, timeout):
         self.timeout = timeout
@@ -49,12 +40,6 @@ class MessageParams:
 
 
 class MessageData:
-    id: int
-    magic: str
-    method: str
-    params: MessageParams
-    session: int
-
     def __init__(self, message_id, session):
         self.id = message_id
         self.session = session
