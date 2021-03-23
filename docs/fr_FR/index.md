@@ -15,7 +15,10 @@ Si vous rencontrez des problèmes avec votre appareil, vous pouvez [ouvrir un ti
 
 ## Configuration du plugin
 
-Pensez à bien démarrer le démon dans la page de configuration du plugin.
+Dans la page de configuration du plugin:
+- Activez le plugin
+- Installer les dépendances (si besoin)
+- Démarrez le démon
 
 ## Ajout d'un équipement
 

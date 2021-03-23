@@ -15,7 +15,10 @@ If you encounter any problem with your device, you can [open a ticket here](http
 
 ## Plugin setup
 
-Remember to start the daemon in the plugin configuration page.
+In the plugin configuration page:
+- Enable the plugin
+- Install the dependencies (if needed)
+- Start the daemon
 
 ## Adding a device
 
