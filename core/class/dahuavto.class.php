@@ -23,6 +23,33 @@ class dahuavto extends eqLogic {
    
     /*     * ***********************Methode static*************************** */
 
+    public static function dependancy_info() {
+		$return = array();
+		$return['log'] = log::getPathToLog(__CLASS__.'_update');
+		$return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependancy';
+		$return['state'] = 'ok';
+        if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
+			$return['state'] = 'in_progress';
+		}
+        else {
+            if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-requests" | wc -l') < 1) {
+                $return['state'] = 'nok';
+            }
+            if (exec(system::getCmdSudo() . 'pip3 list | grep -E "requests" | wc -l') < 1) {
+                $return['state'] = 'nok';
+            }
+        }
+		return $return;
+	}
+
+	public static function dependancy_install() {
+		log::remove(__CLASS__ . '_update');
+		return array(
+            'script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__) . '/dependancy',
+            'log' => log::getPathToLog(__CLASS__ . '_update')
+        );
+	}
+
     public static function deamon_start() {
 		self::deamon_stop();
 		$daemon_info = self::deamon_info();

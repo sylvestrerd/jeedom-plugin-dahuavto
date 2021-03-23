@@ -9,7 +9,7 @@
 	"author" : "Paul-DS",
 	"require" : "3.3.39",
 	"category" : "devicecommunication",
-	"hasDependency" : false,
+	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 0,
 	"changelog" : "https://paul-ds.github.io/jeedom-plugin-dahuavto/#language#/changelog",
