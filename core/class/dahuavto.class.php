@@ -53,18 +53,17 @@ class dahuavto extends eqLogic {
     public static function deamon_start() {
 		self::deamon_stop();
 		$daemon_info = self::deamon_info();
-		$unlock = exec('sudo rfkill unblock all >/dev/null 2>&1');
 		$daemon_path = realpath(dirname(__FILE__) . '/../../resources/dahuavto');
 		$cmd = 'sudo /usr/bin/python3 ' . $daemon_path . '/daemon.py';
-		$cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel('dahuavto'));
+		$cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
 		// $cmd .= ' --device ' . $device;
-		$cmd .= ' --socketport ' . config::byKey('socketport', 'dahuavto');
+		$cmd .= ' --socketport ' . config::byKey('socketport', __CLASS__);
 		$cmd .= ' --sockethost 127.0.0.1';
 		$cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/dahuavto/core/php/dahuavto.php';
-		$cmd .= ' --apikey ' . jeedom::getApiKey('dahuavto');
+		$cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__);
 		$cmd .= ' --daemonname local';
-		$cmd .= ' --pid ' . jeedom::getTmpFolder('dahuavto') . '/daemon.pid';
-		log::add('dahuavto', 'info', 'Launching dahuavto daemon : ' . $cmd);
+		$cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/daemon.pid';
+		log::add(__CLASS__, 'info', 'Launching dahuavto daemon : ' . $cmd);
 		$result = exec($cmd . ' >> ' . log::getPathToLog('dahuavto_daemon') . ' 2>&1 &');
 		$i = 0;
 		while ($i < 30) {
@@ -76,13 +75,12 @@ class dahuavto extends eqLogic {
 			$i++;
 		}
 		if ($i >= 30) {
-			log::add('dahuavto', 'error', __('Unable to start dahuavto daemon, check the logs',__FILE__), 'unableStartdaemon');
+			log::add(__CLASS__, 'error', __('Unable to start dahuavto daemon, check the logs',__FILE__), 'unableStartdaemon');
 			return false;
 		}
-		// blea::launch_allremotes();
-		message::removeAll('dahuavto', 'unableStartdaemon');
+		message::removeAll(__CLASS__, 'unableStartdaemon');
 
-        foreach (self::byType('dahuavto') as $device) {
+        foreach (self::byType(__CLASS__) as $device) {
             $device->sendToDaemon('add');
         }
 
@@ -96,7 +94,7 @@ class dahuavto extends eqLogic {
 			system::kill($pid);
 		}
 		system::kill('dahuavto/daemon.py');
-		system::fuserk(config::byKey('socketport', 'dahuavto'));
+		system::fuserk(config::byKey('socketport', __CLASS__));
 		sleep(1);
 	}
    
@@ -105,7 +103,7 @@ class dahuavto extends eqLogic {
 		$return['log'] = '';
         $return['launchable'] = 'ok';
         $return['state'] = 'nok';
-		$pid_file = jeedom::getTmpFolder('dahuavto') . '/daemon.pid';
+		$pid_file = jeedom::getTmpFolder(__CLASS__) . '/daemon.pid';
 		if (file_exists($pid_file)) {
 			if (@posix_getsid(trim(file_get_contents($pid_file)))) {
 				$return['state'] = 'ok';
@@ -122,7 +120,7 @@ class dahuavto extends eqLogic {
         $conf = $this->getConfiguration();
 
         if ($conf['host'] && $conf['username'] && $conf['password'] && !$conf['serial-number']) {
-            log::add('dahuavto', 'info', 'Get device infos... ('. $conf['host'] . ')');
+            log::add(__CLASS__, 'info', 'Get device infos... ('. $conf['host'] . ')');
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "http://" . $conf['host'] . "/cgi-bin/magicBox.cgi?action=getSystemInfo");
@@ -130,7 +128,7 @@ class dahuavto extends eqLogic {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
             curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);
             $result = curl_exec($ch);
-            log::add('dahuavto', 'debug', 'Request result : ' . $result);
+            log::add(__CLASS__, 'debug', 'Request result : ' . $result);
             if ($result) {
                 foreach (explode("\n", $result) as $line) {
                     $infos = explode('=', $line);
@@ -206,7 +204,7 @@ class dahuavto extends eqLogic {
 
         if ($conf['host'] && $conf['username'] && $conf['password']) {
             $value = json_encode(array(
-                'apikey' => jeedom::getApiKey('dahuavto'),
+                'apikey' => jeedom::getApiKey(__CLASS__),
                 'cmd' => $command,
                 'device' => array(
                     'id' => $this->getId(),
@@ -221,7 +219,7 @@ class dahuavto extends eqLogic {
 
     public static function sendSocketMessage($_value) {
         $socket = socket_create(AF_INET, SOCK_STREAM, 0);
-        socket_connect($socket, '127.0.0.1', config::byKey('socketport', 'dahuavto'));
+        socket_connect($socket, '127.0.0.1', config::byKey('socketport', __CLASS__));
         socket_write($socket, $_value, strlen($_value));
         socket_close($socket);
 	}
@@ -238,7 +236,7 @@ class dahuavtoCmd extends cmd {
             case 'unlock':
                 $conf = $eqlogic->getConfiguration();
                 if ($conf['host'] && $conf['username'] && $conf['password']) {
-                    log::add('dahuavto', 'info', 'Unlock door...('. $conf['host'] . ')');
+                    log::add(__CLASS__, 'info', 'Unlock door...('. $conf['host'] . ')');
         
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, "http://" . $conf['host'] . "/cgi-bin/accessControl.cgi?action=openDoor&channel=1&UserID=101&Type=Remote");
@@ -247,10 +245,10 @@ class dahuavtoCmd extends cmd {
                     curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);
                     $result = curl_exec($ch);
                     if ($result === FALSE) {
-                        log::add('dahuavto', 'error', 'Door open failed');
+                        log::add(__CLASS__, 'error', 'Door open failed');
                     }
                     else {
-                        log::add('dahuavto', 'info', 'Door opened');
+                        log::add(__CLASS__, 'info', 'Door opened');
                     }
                 }
 
