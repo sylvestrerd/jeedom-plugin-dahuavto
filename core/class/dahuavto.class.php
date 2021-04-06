@@ -35,7 +35,7 @@ class dahuavto extends eqLogic {
             if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "python3\-requests" | wc -l') < 1) {
                 $return['state'] = 'nok';
             }
-            if (exec(system::getCmdSudo() . 'pip3 list | grep -E "requests" | wc -l') < 1) {
+            if (exec(system::getCmdSudo() . 'pip3 list | grep -E "requests|pyudev" | wc -l') < 2) {
                 $return['state'] = 'nok';
             }
         }
