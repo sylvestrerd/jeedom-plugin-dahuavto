@@ -39,7 +39,6 @@ class DahuaVTOClient(asyncio.Protocol):
             self.transport = transport
 
             self.load_dahua_info()
-            # self.initialize_mqtt_client()
             self.pre_login()
 
         except Exception as ex:
@@ -197,8 +196,15 @@ class DahuaVTOClient(asyncio.Protocol):
         try:
             response_parts = str(response).split("\\n")
             for response_part in response_parts:
-                if "{" in response_part:
-                    start = response_part.index("{")
+                start = None
+                if '{"' in response_part:
+                    start = response_part.index('{"')
+                elif '{ "' in response_part:
+                    start = response_part.index('{ "')
+                elif '{' in response_part:
+                    start = response_part.index('{')
+                
+                if start is not None:
                     message = response_part[start:]
 
                     result = json.loads(message)
