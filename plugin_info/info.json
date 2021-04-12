@@ -2,8 +2,8 @@
 	"id" : "dahuavto",
 	"name" : "Dahua VTO",
 	"description" : {
-		"fr_FR": "Plugin permettant la communication avec un VTO de marque Dahua",
-		"en_US": "Plugin used to communicate with a Dahua VTO"
+		"fr_FR": "Plugin permettant la communication avec un visiophone de marque Dahua",
+		"en_US": "Plugin used to communicate with a Dahua videophone"
 	},
 	"licence" : "AGPL",
 	"author" : "Paul-DS",
