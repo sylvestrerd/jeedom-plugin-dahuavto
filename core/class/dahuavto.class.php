@@ -161,32 +161,51 @@ class dahuavto extends eqLogic {
         $calling->setSubType('binary');
         $calling->save();
 
-        $unlocked = $this->getCmd(null, 'unlocked');
+        $oldUnlocked = $this->getCmd(null, 'unlocked');
+        if (is_object($oldUnlocked)) {
+            $oldUnlocked->remove();
+        }
+
+        $oldUnlock = $this->getCmd(null, 'unlock');
+        if (is_object($oldUnlock)) {
+            $oldUnlock->remove();
+        }
+
+        $this->createDoorCommands(1);
+        $this->createDoorCommands(2);
+
+        $this->sendToDaemon('add');
+    }
+
+    private function createDoorCommands($index) {
+        $unlocked = $this->getCmd(null, 'unlocked' . $index);
         if (!is_object($unlocked)) {
             $unlocked = new dahuavtoCmd();
-            $unlocked->setName(__('Porte', __FILE__));
+            $unlocked->setName(__('Porte', __FILE__) . ' ' . $index);
         }
-        $unlocked->setLogicalId('unlocked');
+        $unlocked->setLogicalId('unlocked' . $index);
         $unlocked->setEqLogic_id($this->getId());
         $unlocked->setType('info');
         $unlocked->setSubType('binary');
         $unlocked->setTemplate('dashboard','lock');
         $unlocked->setTemplate('mobile','lock');
         $unlocked->setDisplay('invertBinary', 1);
+        $unlocked->setIsVisible(0);
         $unlocked->save();
 
-        $unlock = $this->getCmd(null, 'unlock');
+        $unlock = $this->getCmd(null, 'unlock' . $index);
         if (!is_object($unlock)) {
             $unlock = new dahuavtoCmd();
-            $unlock->setName(__('Déverouiller', __FILE__));
+            $unlock->setName(__('Déverouiller porte', __FILE__) . ' ' . $index);
         }
+        $unlock->setLogicalId('unlock' . $index);
         $unlock->setEqLogic_id($this->getId());
-        $unlock->setLogicalId('unlock');
         $unlock->setType('action');
         $unlock->setSubType('other');
+        $unlock->setValue($unlocked->getId());
+        $unlock->setTemplate('dashboard','lock');
+        $unlock->setTemplate('mobile','lock');
         $unlock->save();
-
-        $this->sendToDaemon('add');
     }
 
     public function preRemove() {
@@ -234,12 +253,16 @@ class dahuavtoCmd extends cmd {
 
         switch ($this-> getLogicalId()) {
             case 'unlock':
+            case 'unlock1':
+            case 'unlock2':
                 $conf = $eqlogic->getConfiguration();
                 if ($conf['host'] && $conf['username'] && $conf['password']) {
+                    $index = $this-> getLogicalId() == 'unlock2' ? 2 : 1;
+
                     log::add(__CLASS__, 'info', 'Unlock door...('. $conf['host'] . ')');
         
                     $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, "http://" . $conf['host'] . "/cgi-bin/accessControl.cgi?action=openDoor&channel=1&UserID=101&Type=Remote");
+                    curl_setopt($ch, CURLOPT_URL, "http://{$conf['host']}/cgi-bin/accessControl.cgi?action=openDoor&channel={$index}&UserID=101&Type=Remote");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
                     curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);

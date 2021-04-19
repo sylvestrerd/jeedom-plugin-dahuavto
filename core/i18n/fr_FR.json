@@ -3,7 +3,7 @@
         "401 - Accès non autorisé": "401 - Accès non autorisé",
         "Port socket interne (modification dangereuse)": "Port socket interne (modification dangereuse)"
     },
-    "plugins\/dahuavto\/desktop\/php\/weather.php": {
+    "plugins\/dahuavto\/desktop\/php\/dahuavto.php": {
         "401 - Accès non autorisé": "401 - Accès non autorisé",
         "Gestion": "Gestion",
         "Ajouter": "Ajouter",
@@ -33,20 +33,20 @@
         "Référence": "Référence",
         "N° de série": "N° de série"
     },
-    "plugins\/dahuavto\/desktop\/js\/weather.js": {
+    "plugins\/dahuavto\/desktop\/js\/dahuavto.js": {
         "Nom": "Nom",
         "Afficher": "Afficher",
         "Historiser": "Historiser",
         "Tester": "Tester"
     },
-    "plugins\/dahuavto\/core\/ajax\/weather.ajax.php": {
+    "plugins\/dahuavto\/core\/ajax\/dahuavto.ajax.php": {
         "401 - Accès non autorisé": "401 - Accès non autorisé",
         "Weather inconnu verifié l\\'id": "Weather inconnu verifié l\\'id",
         "Aucune methode correspondante à : ": "Aucune methode correspondante à : "
     },
-    "plugins\/dahuavto\/core\/class\/weather.class.php": {
+    "plugins\/dahuavto\/core\/class\/dahuavto.class.php": {
         "Appel": "Appel",
         "Porte": "Porte",
-        "Déverouiller": "Déverouiller",
+        "Déverouiller porte": "Déverouiller porte"
     }
 }

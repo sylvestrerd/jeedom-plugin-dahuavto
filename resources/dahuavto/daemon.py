@@ -70,10 +70,13 @@ class DahuaVTOManager:
             ).start()
 
         if message["Action"] == "Pulse" and message["Code"] == "AccessControl":
-            self._send_change({ 'unlocked': 1 })
+            # "Index" is 0 or 1
+            # 'unlocked' command is 1 or 2
+            commandName = 'unlocked2' if message["Index"] == 1 else 'unlocked1'
+            self._send_change({ commandName: 1 })
             Timer(
                 10,
-                lambda: self._send_change({ 'unlocked': 0 }),
+                lambda: self._send_change({ commandName: 0 }),
             ).start()
 
     def _send_change(self, params):
