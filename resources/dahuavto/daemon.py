@@ -62,14 +62,16 @@ class DahuaVTOManager:
         logging.debug(message)
         logging.debug("-------------------")
 
-        if message["Action"] == "Start" and message["Code"] == "CallNoAnswered":
+        messageData = message.get("Data", {})
+
+        if message.get("Action") == "Start" and message.get("Code") == "CallNoAnswered":
             self._send_change({ 'calling': 1 })
             Timer(
                 30,
                 lambda: self._send_change({ 'calling': 0 }),
             ).start()
 
-        if message["Action"] == "Pulse" and message["Code"] == "AccessControl":
+        if message.get("Action") == "Pulse" and message.get("Code") == "AccessControl" and messageData.get("Status") == 1:
             # "Index" is 0 or 1
             # 'unlocked' command is 1 or 2
             commandName = 'unlocked2' if message["Index"] == 1 else 'unlocked1'
