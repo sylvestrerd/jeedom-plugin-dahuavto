@@ -103,7 +103,7 @@ class DahuaVTOClient(asyncio.Protocol):
             self.login()
 
     def handle_login(self, params):
-        keep_alive_interval = params.get("keepAliveInterval")
+        keep_alive_interval = params.get("keepAliveInterval") if params else None
 
         if keep_alive_interval is not None:
             self.keep_alive_interval = params.get("keepAliveInterval") - 5
