@@ -132,7 +132,7 @@ def read_socket(name):
         except Exception as e:
             logging.error("Exception on socket : {}".format(e))
             logging.debug(traceback.format_exc())
-        time.sleep(0.3)
+        sleep(0.3)
     
     shutdown()
   
