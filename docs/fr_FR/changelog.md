@@ -1,6 +1,6 @@
 # Changelog plugin Dahua VTO
 
-# 22/08/2021
+# 27/08/2021
 
 - [#4](https://github.com/Paul-DS/jeedom-plugin-dahuavto/issues/4), [#5](https://github.com/Paul-DS/jeedom-plugin-dahuavto/issues/5) Corrections de problèmes lors de l'installation des dépendances
 - [#6](https://github.com/Paul-DS/jeedom-plugin-dahuavto/issues/6) Correction d'un problème de compatibilité avec le VTO 2000A
