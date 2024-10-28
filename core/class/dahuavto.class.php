@@ -123,7 +123,7 @@ class dahuavto extends eqLogic {
             log::add(__CLASS__, 'info', 'Get device infos... ('. $conf['host'] . ')');
 
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "http://" . $conf['host'] . "/cgi-bin/magicBox.cgi?action=getSystemInfo");
+            curl_setopt($ch, CURLOPT_URL, $conf['protocole']."://" . $conf['host'] . ":". $conf['port']"/cgi-bin/magicBox.cgi?action=getSystemInfo");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
             curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);
