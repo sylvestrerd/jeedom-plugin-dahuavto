@@ -123,7 +123,7 @@ class dahuavto extends eqLogic {
             log::add(__CLASS__, 'info', 'Get device infos... ('. $conf['host'] . ')');
 
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $conf['protocole']."://" . $conf['host'] . ":". $conf['port']"/cgi-bin/magicBox.cgi?action=getSystemInfo");
+            curl_setopt($ch, CURLOPT_URL, "http://" . $conf['host'] . "/cgi-bin/magicBox.cgi?action=getSystemInfo");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
             curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);
@@ -229,9 +229,7 @@ class dahuavto extends eqLogic {
                     'id' => $this->getId(),
                     'host' => $conf['host'],
                     'username' => $conf['username'],
-                    'password' => $conf['password'],
-                    'protocole' => $conf['protocole'],
-                    'port' => $conf['port']
+                    'password' => $conf['password']
                 )
             ));
             self::sendSocketMessage($value,True);
@@ -264,7 +262,7 @@ class dahuavtoCmd extends cmd {
                     log::add(__CLASS__, 'info', 'Unlock door...('. $conf['host'] . ')');
         
                     $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, "{$conf['protocole']}://{$conf['host']}:{$conf['port']}/cgi-bin/accessControl.cgi?action=openDoor&channel={$index}&UserID=101&Type=Remote");
+                    curl_setopt($ch, CURLOPT_URL, "http://{$conf['host']}/cgi-bin/accessControl.cgi?action=openDoor&channel={$index}&UserID=101&Type=Remote");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
                     curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);
