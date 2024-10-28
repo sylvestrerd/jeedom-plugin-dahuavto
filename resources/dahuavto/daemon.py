@@ -7,6 +7,7 @@ import logging
 import os
 import sys
 import traceback
+import ssl
 from threading import Timer, Thread
 from time import sleep
 
@@ -25,20 +26,19 @@ DEVICES = {}
 class DahuaVTOManager:
     def __init__(self, device):
         self._device = device
-
     def initialize(self):
         self._running = True
         while self._running:
             try:
                 logging.info("Connecting")
-
                 self._loop = asyncio.new_event_loop()
-
                 client = self._loop.create_connection(
                     lambda: DahuaVTOClient(
                         self._device['host'],
                         self._device['username'],
                         self._device['password'],
+                        self._device['protocole'],
+                        self._device['port'],
                         self._message_received),
                     self._device['host'],
                     5000
@@ -52,7 +52,7 @@ class DahuaVTOManager:
                 sleep(5)
 
             except Exception as e:
-                logging.error("Connection failed will try to connect in 30 seconds ({})".format(e))
+                logging.error(" Connection failed will try to connect in 30 seconds ({})".format(e))
                 logging.debug(traceback.format_exc())
 
                 sleep(30)
@@ -209,7 +209,6 @@ logging.debug("daemon_name: {}".format(_daemon_name))
 try:
     jeedom_utils.write_pid(str(_pidfile))
     JEEDOM_COM = jeedom_com(apikey = _apikey,url = _callback,cycle=_cycle)
-
     if not JEEDOM_COM.test():
         logging.error('Network communication issues. Please fix your Jeedom network configuration.')
         shutdown()
