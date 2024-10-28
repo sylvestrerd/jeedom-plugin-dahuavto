@@ -127,6 +127,22 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-sm-3 control-label"> {{Port}}</label>
+								<div class="col-sm-7">
+									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="port"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{Protocole}}</label>
+								<div class="col-sm-7">
+									<select class="eqLogicAttr form-control listModel" data-l1key="configuration" data-l2key="protocole">
+										<option default></option>
+										<option value="HTTP">HTTP</option>
+										<option value="HTTPS">HTTPS</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-sm-3 control-label"> {{Nom d'utilisateur}}</label>
 								<div class="col-sm-7">
 									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="username"/>
