@@ -7,7 +7,7 @@ import logging
 import sys
 from threading import Timer
 from typing import Optional
-
+import ssl
 import requests
 from requests.auth import HTTPDigestAuth
 
@@ -16,13 +16,15 @@ from messages import MessageData
 DAHUA_ALLOWED_DETAILS = ["deviceType", "serialNumber"]
 
 class DahuaVTOClient(asyncio.Protocol):
-    def __init__(self, host, username, password, message_callback):
+    def __init__(self, host, username, password, protocole, port, message_callback):
         self.dahua_details = {}
+        logging.info(host)
         self.host = host
         self.username = username
         self.password = password
+        self.protocole = protocole
+        self.port = port
         self._message_callback = message_callback
-
         self.realm = None
         self.random = None
         self.request_id = 1
@@ -131,7 +133,7 @@ class DahuaVTOClient(asyncio.Protocol):
             self.transport.write(message_data.to_message())
 
     def pre_login(self):
-        logging.debug("Prepare pre-login message")
+        logging.info("Prepare pre-login message")
 
         message_data = MessageData(self.request_id, self.session_id)
         message_data.login(self.username)
@@ -140,7 +142,7 @@ class DahuaVTOClient(asyncio.Protocol):
             self.transport.write(message_data.to_message())
 
     def login(self):
-        logging.debug("Prepare login message")
+        logging.info("Prepare login message")
 
         password = self._get_hashed_password(self.random, self.realm, self.username, self.password)
 
@@ -168,15 +170,12 @@ class DahuaVTOClient(asyncio.Protocol):
         Timer(self.keep_alive_interval, self.keep_alive).start()
 
     def load_dahua_info(self):
+        logging.info('Load Info')
         try:
-            logging.debug("Loading Dahua details")
-
-            url = "http://{}/cgi-bin/magicBox.cgi?action=getSystemInfo".format(self.host)
-
-            response = requests.get(url, auth=HTTPDigestAuth(self.username, self.password))
-
+            logging.info("Loading Dahua details")
+            url = self.protocole+"://"+self.host+":"+ self.port +"/cgi-bin/magicBox.cgi?action=getSystemInfo"
+            response = requests.get(url, auth=HTTPDigestAuth(self.username, self.password),verify=False)
             response.raise_for_status()
-
             lines = response.text.split("\r\n")
 
             for line in lines:
