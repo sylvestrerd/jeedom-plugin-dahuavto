@@ -39,6 +39,8 @@ class DahuaVTOManager:
                         self._device['host'],
                         self._device['username'],
                         self._device['password'],
+                        self._device['protocole'],
+                        self._device['port'],
                         self._message_received),
                     self._device['host'],
                     5000

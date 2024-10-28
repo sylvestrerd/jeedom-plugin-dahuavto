@@ -120,15 +120,16 @@ class dahuavto extends eqLogic {
         $conf = $this->getConfiguration();
 
         if ($conf['host'] && $conf['username'] && $conf['password'] && !$conf['serial-number']) {
-            log::add(__CLASS__, 'info', 'Get device infos... ('. $conf['host'] . ')');
+            log::add(__CLASS__, 'info', 'Get device infos... ('.$conf['protocole'] . "://" . $conf['host'] . ":" . $conf['port']  ."/cgi-bin/magicBox.cgi?action=getSystemInfo" . ')');
 
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "http://" . $conf['host'] . "/cgi-bin/magicBox.cgi?action=getSystemInfo");
+            curl_setopt($ch, CURLOPT_URL, $conf['protocole'] . "://" . $conf['host'] . ":" . $conf['port']  ."/cgi-bin/magicBox.cgi?action=getSystemInfo");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);
             $result = curl_exec($ch);
-            log::add(__CLASS__, 'debug', 'Request result : ' . $result);
+            log::add(__CLASS__, 'info', 'Request result : ' . $result);
             if ($result) {
                 foreach (explode("\n", $result) as $line) {
                     $infos = explode('=', $line);
@@ -229,7 +230,10 @@ class dahuavto extends eqLogic {
                     'id' => $this->getId(),
                     'host' => $conf['host'],
                     'username' => $conf['username'],
-                    'password' => $conf['password']
+                    'password' => $conf['password'],
+                    'protocole' => $conf['protocole'],
+                    'port' => $conf['port']
+
                 )
             ));
             self::sendSocketMessage($value,True);
@@ -262,8 +266,9 @@ class dahuavtoCmd extends cmd {
                     log::add(__CLASS__, 'info', 'Unlock door...('. $conf['host'] . ')');
         
                     $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, "http://{$conf['host']}/cgi-bin/accessControl.cgi?action=openDoor&channel={$index}&UserID=101&Type=Remote");
+                    curl_setopt($ch, CURLOPT_URL, "{$conf['protocole']}://{$conf['host']}:{$conf['port']}/cgi-bin/accessControl.cgi?action=openDoor&channel={$index}&UserID=101&Type=Remote");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
                     curl_setopt($ch, CURLOPT_USERPWD, $conf['username'] . ":" . $conf['password']);
                     $result = curl_exec($ch);

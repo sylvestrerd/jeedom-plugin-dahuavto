@@ -5,6 +5,7 @@ import hashlib
 import json
 import logging
 import sys
+import ssl
 from threading import Timer
 from typing import Optional
 
@@ -16,11 +17,13 @@ from messages import MessageData
 DAHUA_ALLOWED_DETAILS = ["deviceType", "serialNumber"]
 
 class DahuaVTOClient(asyncio.Protocol):
-    def __init__(self, host, username, password, message_callback):
+    def __init__(self, host, username, password, protocole, port, message_callback):
         self.dahua_details = {}
         self.host = host
         self.username = username
         self.password = password
+        self.protocole=protocole
+        self.port=port
         self._message_callback = message_callback
 
         self.realm = None
@@ -171,9 +174,9 @@ class DahuaVTOClient(asyncio.Protocol):
         try:
             logging.debug("Loading Dahua details")
 
-            url = "http://{}/cgi-bin/magicBox.cgi?action=getSystemInfo".format(self.host)
+            url = self.protocole+"://"+self.host+":"+self.port+"/cgi-bin/magicBox.cgi?action=getSystemInfo"
 
-            response = requests.get(url, auth=HTTPDigestAuth(self.username, self.password))
+            response = requests.get(url, auth=HTTPDigestAuth(self.username, self.password),verify=False)
 
             response.raise_for_status()
 

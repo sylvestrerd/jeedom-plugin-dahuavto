@@ -25,6 +25,8 @@
         "Activer": "Activate",
         "Visible": "Visible",
         "Paramètres": "Settings",
+        "Protocole": "Procotol",
+        "Port" : "Port",
         "Hote": "Host",
         "Nom d'utilisateur": "Username",
         "Mot de passe": "Password",
