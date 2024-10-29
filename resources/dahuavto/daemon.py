@@ -61,33 +61,35 @@ class DahuaVTOManager:
 
     def _message_received(self, message):
         logging.debug(message["Action"])
-        logging.debug(message)
+        #logging.debug(message)
         logging.debug("-------------------")
 
         messageData = message.get("Data", {})
-	if message.get("Action") == "Pulse" and message.get("Code") == "AccessControl":
-            self._send_change({ 'nbadge': 'Dévérouillage par clavier' })
-            Timer(
-                30,
-                lambda: self._send_change({ 'nbadge': '' }),
-            ).start()
+        
         if message.get("Action") == "Start" and message.get("Code") == "CallNoAnswered":
             self._send_change({ 'calling': 1 })
             Timer(
-                30,
+                5,
                 lambda: self._send_change({ 'calling': 0 }),
             ).start()
-
+        
         if message.get("Action") == "Pulse" and message.get("Code") == "AccessControl" and messageData.get("Status") == 1:
             # "Index" is 0 or 1
             # 'unlocked' command is 1 or 2
             commandName = 'unlocked2' if message["Index"] == 1 else 'unlocked1'
             self._send_change({ commandName: 1 })
+
+            Varmethod=self.methodedev(messageData.get("Method"))
+            logging.debug(Varmethod)
+            logging.debug("-------------------")
+            self._send_change({ 'typedev': Varmethod})
+            self._send_change({ 'datederdev': messageData.get("LocaleTime")})
+            self._send_change({ 'nbadge': messageData.get("CardNo")})
             Timer(
                 10,
                 lambda: self._send_change({ commandName: 0 }),
             ).start()
-
+    
     def _send_change(self, params):
         JEEDOM_COM.add_changes("devices::{}".format(self._device['id']), params),
 
@@ -96,6 +98,13 @@ class DahuaVTOManager:
         if self._loop and self._loop.is_running:
             self._loop.stop()
 
+    def methodedev(self,i):
+        switcher={
+                0:'Dévérouillage par clavier',
+                4:'Dévérouillage par DMSS',
+                1:'Dévérouillage par badge'
+             }
+        return switcher.get(i,"")
 
 def read_socket(name):
     should_stop = False
