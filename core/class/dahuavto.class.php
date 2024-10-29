@@ -161,6 +161,7 @@ class dahuavto extends eqLogic {
         $calling->setType('info');
         $calling->setSubType('binary');
         $calling->save();
+
         $nbadge = $this->getCmd(null, 'nbadge');
         if (!is_object($nbadge)) {
             $nbadge = new dahuavtoCmd();
@@ -171,6 +172,20 @@ class dahuavto extends eqLogic {
         $nbadge->setType('info');
         $nbadge->setSubType('string');
         $nbadge->save();
+
+        $typedev = $this->getCmd(null, 'typedev');
+        if (!is_object($typedev)) {
+            $typedev = new dahuavtoCmd();
+            $typedev->setName(__('Type dévérouillage', __FILE__));
+        }
+        $typedev->setLogicalId('typedev');
+        $typedev->setEqLogic_id($this->getId());
+        $typedev->setType('info');
+        $typedev->setSubType('string');
+        $typedev->save();
+        
+        
+
         $oldUnlocked = $this->getCmd(null, 'unlocked');
         if (is_object($oldUnlocked)) {
             $oldUnlocked->remove();
@@ -180,9 +195,20 @@ class dahuavto extends eqLogic {
         if (is_object($oldUnlock)) {
             $oldUnlock->remove();
         }
-
+        
         $this->createDoorCommands(1);
         $this->createDoorCommands(2);
+
+        $datederdev = $this->getCmd(null, 'datederdev');
+        if (!is_object($datederdev)) {
+            $datederdev = new dahuavtoCmd();
+            $datederdev->setName(__('Date unlock', __FILE__));
+        }
+        $datederdev->setLogicalId('datederdev');
+        $datederdev->setEqLogic_id($this->getId());
+        $datederdev->setType('info');
+        $datederdev->setSubType('string');
+        $datederdev->save();
 
         $this->sendToDaemon('add');
     }
