@@ -65,7 +65,12 @@ class DahuaVTOManager:
         logging.debug("-------------------")
 
         messageData = message.get("Data", {})
-
+	if message.get("Action") == "Pulse" and message.get("Code") == "AccessControl":
+            self._send_change({ 'nbadge': 'Dévérouillage par clavier' })
+            Timer(
+                30,
+                lambda: self._send_change({ 'nbadge': '' }),
+            ).start()
         if message.get("Action") == "Start" and message.get("Code") == "CallNoAnswered":
             self._send_change({ 'calling': 1 })
             Timer(
