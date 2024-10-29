@@ -161,7 +161,16 @@ class dahuavto extends eqLogic {
         $calling->setType('info');
         $calling->setSubType('binary');
         $calling->save();
-
+        $nbadge = $this->getCmd(null, 'nbadge');
+        if (!is_object($nbadge)) {
+            $nbadge = new dahuavtoCmd();
+            $nbadge->setName(__('Badge', __FILE__));
+        }
+        $nbadge->setLogicalId('nbadge');
+        $nbadge->setEqLogic_id($this->getId());
+        $nbadge->setType('info');
+        $nbadge->setSubType('string');
+        $nbadge->save();
         $oldUnlocked = $this->getCmd(null, 'unlocked');
         if (is_object($oldUnlocked)) {
             $oldUnlocked->remove();
