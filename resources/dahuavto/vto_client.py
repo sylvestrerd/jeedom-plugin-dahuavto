@@ -17,13 +17,14 @@ from messages import MessageData
 DAHUA_ALLOWED_DETAILS = ["deviceType", "serialNumber"]
 
 class DahuaVTOClient(asyncio.Protocol):
-    def __init__(self, host, username, password, protocole, port, message_callback):
+    def __init__(self, host, username, password, protocole, port, model, message_callback):
         self.dahua_details = {}
         self.host = host
         self.username = username
         self.password = password
         self.protocole=protocole
         self.port=port
+        self.model=model
         self._message_callback = message_callback
 
         self.realm = None
