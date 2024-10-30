@@ -81,9 +81,9 @@ class DahuaVTOManager:
             self._send_change({ commandName: 1 })
 
             Varmethod=self.methodedev(messageData.get("Method"))
-            logging.debug(Varmethod)
+            logging.debug(self._device['model'])
             logging.debug("-------------------")
-            if messageData.get('deviceType')=='DHI-VTO3221E-P':
+            if self._device['model']=='VTO3221E':
                 self._send_change({ 'typedev': Varmethod})
                 self._send_change({ 'datederdev': messageData.get("LocaleTime")})
                 self._send_change({ 'nbadge': messageData.get("CardNo")})
