@@ -267,7 +267,8 @@ class dahuavto extends eqLogic {
                     'username' => $conf['username'],
                     'password' => $conf['password'],
                     'protocole' => $conf['protocole'],
-                    'port' => $conf['port']
+                    'port' => $conf['port'],
+		    'model'=> $conf['model']
 
                 )
             ));
