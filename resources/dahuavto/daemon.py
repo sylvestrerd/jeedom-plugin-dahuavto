@@ -41,6 +41,7 @@ class DahuaVTOManager:
                         self._device['password'],
                         self._device['protocole'],
                         self._device['port'],
+                        self._device['model'],
                         self._message_received),
                     self._device['host'],
                     5000
@@ -82,9 +83,11 @@ class DahuaVTOManager:
             Varmethod=self.methodedev(messageData.get("Method"))
             logging.debug(Varmethod)
             logging.debug("-------------------")
-            self._send_change({ 'typedev': Varmethod})
-            self._send_change({ 'datederdev': messageData.get("LocaleTime")})
-            self._send_change({ 'nbadge': messageData.get("CardNo")})
+            if messageData.get('deviceType')=='DHI-VTO3221E-P':
+                self._send_change({ 'typedev': Varmethod})
+                self._send_change({ 'datederdev': messageData.get("LocaleTime")})
+                self._send_change({ 'nbadge': messageData.get("CardNo")})
+            
             Timer(
                 10,
                 lambda: self._send_change({ commandName: 0 }),
