@@ -104,7 +104,7 @@ class DahuaVTOManager:
     def methodedev(self,i):
         switcher={
                 0:'Dévérouillage par clavier',
-                4:'Dévérouillage par DMSS',
+                4:'Dévérouillage distant',
                 1:'Dévérouillage par badge'
              }
         return switcher.get(i,"")
